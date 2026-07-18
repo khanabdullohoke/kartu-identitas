@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cek Kartu Anggota OSIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon: #6E1E2B;
+    --maroon-deep: #4E1420;
+    --gold: #B98B2E;
+    --paper: #F6F1E6;
+    --paper-line: #E4DBC8;
+    --ink: #2A2420;
+    --muted: #8C8478;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    font-family:'Work Sans', sans-serif;
+    color:var(--ink);
+    background-image:
+      repeating-linear-gradient(var(--paper-line) 0 1px, transparent 1px 32px);
+    min-height:100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:40px 16px;
+  }
+  .halaman{
+    width:100%;
+    max-width:460px;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--maroon);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:18px; height:1px;
+    background:var(--maroon);
+    display:inline-block;
+  }
+  h1{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:28px;
+    line-height:1.2;
+    margin:10px 0 4px;
+    color:var(--maroon-deep);
+  }
+  .sub{
+    color:var(--muted);
+    font-size:14px;
+    margin-bottom:28px;
+  }
+  form{
+    display:flex;
+    gap:8px;
+    margin-bottom:22px;
+  }
+  input[type=text]{
+    flex:1;
+    padding:13px 14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:15px;
+    letter-spacing:.03em;
+    border:1.5px solid var(--paper-line);
+    border-radius:3px;
+    background:#fffdf8;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .15s;
+  }
+  input[type=text]:focus{border-color:var(--maroon);}
+  input[type=text]::placeholder{color:#B7AD98;}
+
+  .seal{
+    position:relative;
+    width:52px; height:52px;
+    border-radius:50%;
+    border:2px solid var(--maroon);
+    background:var(--maroon);
+    color:var(--paper);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.05em;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:transform .12s ease;
+  }
+  .seal:active{transform:scale(0.88) rotate(-6deg);}
+  .seal:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+
+  .status{
+    font-size:13px;
+    color:var(--muted);
+    min-height:18px;
+    margin-bottom:18px;
+  }
+  .status.err{color:#A33A2C;}
+
+  .kartu{
+    display:none;
+    border:1.5px solid var(--maroon);
+    border-radius:6px;
+    background:linear-gradient(135deg,#fffdf8, #FAF3E4);
+    padding:22px 20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .kartu.show{display:block; animation:naik .35s ease;}
+  @keyframes naik{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .kartu::after{
+    content:"TERVERIFIKASI";
+    position:absolute;
+    top:16px; right:-34px;
+    background:var(--gold);
+    color:#fff;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.1em;
+    padding:3px 40px;
+    transform:rotate(35deg);
+  }
+  .kartu-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.1em;
+    color:var(--maroon);
+    text-transform:uppercase;
+  }
+  .kartu-nama{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:22px;
+    margin:4px 0 10px;
+    color:var(--maroon-deep);
+  }
+  .kartu-baris{
+    display:flex;
+    font-size:13.5px;
+    padding:4px 0;
+    border-bottom:1px dashed var(--paper-line);
+  }
+  .kartu-baris span:first-child{width:90px; color:var(--muted);}
+  .unduh{
+    display:inline-block;
+    margin-top:16px;
+    background:var(--maroon);
+    color:#fff;
+    text-decoration:none;
+    font-size:13.5px;
+    font-weight:500;
+    padding:10px 18px;
+    border-radius:3px;
+    transition:background .15s;
+  }
+  .unduh:hover{background:var(--maroon-deep);}
+</style>
+</head>
+<body>
+  <div class="halaman">
+    <div class="eyebrow">Registrasi Anggota</div>
+    <h1>Cek Kartu Anggota OSIS</h1>
+    <p class="sub">Masukkan NISN untuk melihat status dan mengunduh kartu.</p>
+
+    <form id="formCari">
+      <input type="text" id="inputNisn" placeholder="Contoh: 0051234567" inputmode="numeric" required>
+      <button type="submit" class="seal" aria-label="Cari kartu">CARI</button>
+    </form>
+
+    <div class="status" id="status"></div>
+
+    <div class="kartu" id="kartu">
+      <div class="kartu-label">Kartu Identitas Siswa</div>
+      <div class="kartu-nama" id="kNama">-</div>
+      <div class="kartu-baris"><span>Jenis Kelamin</span><span id="kJk">-</span></div>
+      <div class="kartu-baris"><span>Kompetensi</span><span id="kKompetensi">-</span></div>
+      <a class="unduh" id="kUnduh" href="#" target="_blank" rel="noopener">Unduh Kartu (PDF) ↓</a>
+    </div>
+  </div>
+
+<script>
+  // GANTI dengan URL Web App hasil deploy Apps Script kamu
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxjtUbvKOAXtjxAr40ZzqjzRGMgnTE0qd19ok3ISza_qaL5Iz65X6jzjkDWfdlMf0w0/exec";
+
+  const form = document.getElementById('formCari');
+  const statusEl = document.getElementById('status');
+  const kartuEl = document.getElementById('kartu');
+
+  form.addEventListener('submit', async function(ev){
+    ev.preventDefault();
+    const nisn = document.getElementById('inputNisn').value.trim();
+    if(!nisn) return;
+
+    statusEl.textContent = 'Mencari data...';
+    statusEl.className = 'status';
+    kartuEl.classList.remove('show');
+
+    try{
+      const res = await fetch(APPS_SCRIPT_URL + '?nisn=' + encodeURIComponent(nisn));
+      const data = await res.json();
+
+      if(!data.found){
+        statusEl.textContent = 'NISN tidak ditemukan. Pastikan kamu sudah mengisi form pendaftaran.';
+        statusEl.className = 'status err';
+        return;
+      }
+
+      document.getElementById('kNama').textContent = data.nama || '-';
+      document.getElementById('kJk').textContent = data.jenisKelamin || '-';
+      document.getElementById('kKompetensi').textContent = data.kompetensi || '-';
+
+      if(data.pdfUrl){
+        document.getElementById('kUnduh').href = data.pdfUrl;
+        document.getElementById('kUnduh').style.display = 'inline-block';
+        statusEl.textContent = 'Kartu ditemukan.';
+      } else {
+        document.getElementById('kUnduh').style.display = 'none';
+        statusEl.textContent = 'Data ditemukan, kartu sedang diproses. Coba lagi beberapa saat.';
+      }
+      statusEl.className = 'status';
+      kartuEl.classList.add('show');
+
+    }catch(err){
+      statusEl.textContent = 'Gagal menghubungi server. Coba lagi.';
+      statusEl.className = 'status err';
+    }
+  });
+</script>
+</body>
+</html>

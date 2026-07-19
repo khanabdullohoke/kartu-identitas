@@ -3,241 +3,532 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cek Kartu Anggota OSIS</title>
+<title>Kartu Identitas Siswa — SMKS Ciledug Al Musaddadiyah</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --maroon: #6E1E2B;
-    --maroon-deep: #4E1420;
-    --gold: #B98B2E;
-    --paper: #F6F1E6;
-    --paper-line: #E4DBC8;
-    --ink: #2A2420;
-    --muted: #8C8478;
+    --navy:#0b3d91;
+    --navy-deep:#071f4d;
+    --blue:#1e5eff;
+    --amber:#ffb300;
+    --amber-deep:#e69f00;
+    --bg:#eef2fb;
+    --surface:#ffffff;
+    --ink:#0f1a33;
+    --muted:#5c6b8a;
+    --line:#e2e7f5;
+    --ok:#1c9a5b;
+    --err:#e2483d;
   }
   *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
   body{
-    margin:0;
-    background:var(--paper);
-    font-family:'Work Sans', sans-serif;
-    color:var(--ink);
-    background-image:
-      repeating-linear-gradient(var(--paper-line) 0 1px, transparent 1px 32px);
     min-height:100vh;
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1100px 500px at 15% -10%, rgba(255,179,0,0.16), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, rgba(30,94,255,0.18), transparent 55%),
+      var(--bg);
     display:flex;
     align-items:flex-start;
     justify-content:center;
-    padding:40px 16px;
+    padding:0;
   }
-  .halaman{
+
+  .page{
     width:100%;
-    max-width:460px;
-  }
-  .eyebrow{
-    font-family:'JetBrains Mono', monospace;
-    font-size:11px;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-    color:var(--maroon);
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .eyebrow::before{
-    content:"";
-    width:18px; height:1px;
-    background:var(--maroon);
-    display:inline-block;
-  }
-  h1{
-    font-family:'Source Serif 4', serif;
-    font-weight:700;
-    font-size:28px;
-    line-height:1.2;
-    margin:10px 0 4px;
-    color:var(--maroon-deep);
-  }
-  .sub{
-    color:var(--muted);
-    font-size:14px;
-    margin-bottom:28px;
-  }
-  form{
-    display:flex;
-    gap:8px;
-    margin-bottom:22px;
-  }
-  input[type=text]{
-    flex:1;
-    padding:13px 14px;
-    font-family:'JetBrains Mono', monospace;
-    font-size:15px;
-    letter-spacing:.03em;
-    border:1.5px solid var(--paper-line);
-    border-radius:3px;
-    background:#fffdf8;
-    color:var(--ink);
-    outline:none;
-    transition:border-color .15s;
-  }
-  input[type=text]:focus{border-color:var(--maroon);}
-  input[type=text]::placeholder{color:#B7AD98;}
-
-  .seal{
+    max-width:560px;
+    min-height:100vh;
+    background:var(--surface);
+    box-shadow:0 40px 80px -30px rgba(7,31,77,0.25);
     position:relative;
-    width:52px; height:52px;
-    border-radius:50%;
-    border:2px solid var(--maroon);
-    background:var(--maroon);
-    color:var(--paper);
-    font-family:'JetBrains Mono', monospace;
-    font-size:10px;
-    letter-spacing:.05em;
-    cursor:pointer;
-    flex-shrink:0;
-    transition:transform .12s ease;
   }
-  .seal:active{transform:scale(0.88) rotate(-6deg);}
-  .seal:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
 
-  .status{
-    font-size:13px;
-    color:var(--muted);
-    min-height:18px;
-    margin-bottom:18px;
-  }
-  .status.err{color:#A33A2C;}
-
-  .kartu{
-    display:none;
-    border:1.5px solid var(--maroon);
-    border-radius:6px;
-    background:linear-gradient(135deg,#fffdf8, #FAF3E4);
-    padding:22px 20px;
+  /* ===== Hero ===== */
+  .hero{
     position:relative;
+    background:linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 55%, var(--blue) 130%);
+    padding:44px 32px 64px;
+    color:#fff;
     overflow:hidden;
   }
-  .kartu.show{display:block; animation:naik .35s ease;}
-  @keyframes naik{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
-
-  .kartu::after{
-    content:"TERVERIFIKASI";
+  .hero::after{
+    content:"";
     position:absolute;
-    top:16px; right:-34px;
-    background:var(--gold);
-    color:#fff;
-    font-family:'JetBrains Mono', monospace;
-    font-size:9px;
-    letter-spacing:.1em;
-    padding:3px 40px;
-    transform:rotate(35deg);
+    width:280px;height:280px;
+    background:radial-gradient(circle, rgba(255,179,0,0.35), transparent 70%);
+    top:-120px; right:-90px;
+    border-radius:50%;
   }
-  .kartu-label{
-    font-family:'JetBrains Mono', monospace;
-    font-size:10px;
-    letter-spacing:.1em;
-    color:var(--maroon);
-    text-transform:uppercase;
+  .hero .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.2);
+    backdrop-filter:blur(6px);
+    padding:6px 14px 6px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.03em;
+    position:relative;
+    z-index:1;
   }
-  .kartu-nama{
-    font-family:'Source Serif 4', serif;
+  .hero .badge .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 0 4px rgba(255,179,0,0.25);
+  }
+  .hero h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:30px;
+    line-height:1.18;
     font-weight:700;
-    font-size:22px;
-    margin:4px 0 10px;
-    color:var(--maroon-deep);
+    margin:20px 0 8px;
+    position:relative;
+    z-index:1;
+    letter-spacing:-.01em;
   }
-  .kartu-baris{
+  .hero p{
+    margin:0;
+    font-size:14px;
+    color:rgba(255,255,255,0.75);
+    max-width:36ch;
+    position:relative;
+    z-index:1;
+  }
+
+  /* ===== Form card ===== */
+  form{
+    position:relative;
+    margin:-34px 20px 0;
+    background:var(--surface);
+    border-radius:20px;
+    padding:30px 26px 32px;
+    box-shadow:0 20px 45px -20px rgba(7,31,77,0.22);
+    border:1px solid var(--line);
+  }
+
+  .field{margin-bottom:20px;}
+  .field label{
     display:flex;
-    font-size:13.5px;
-    padding:4px 0;
-    border-bottom:1px dashed var(--paper-line);
+    align-items:center;
+    gap:6px;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--navy-deep);
+    margin-bottom:8px;
+    letter-spacing:.01em;
   }
-  .kartu-baris span:first-child{width:90px; color:var(--muted);}
-  .unduh{
-    display:inline-block;
+  .field label .req{color:var(--amber-deep); font-weight:700;}
+
+  input[type=text], select{
+    width:100%;
+    padding:13px 14px;
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;
+    color:var(--ink);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    background:#f9fafe;
+    transition:border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    appearance:none;
+  }
+  select{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' stroke='%235c6b8a' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    padding-right:36px;
+    cursor:pointer;
+  }
+  input[type=text]:focus, select:focus{
+    outline:none;
+    border-color:var(--blue);
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(30,94,255,0.12);
+  }
+  .field .hint{
+    font-size:11.5px;
+    color:var(--muted);
+    margin-top:6px;
+  }
+
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+  .radiogroup{display:flex;gap:10px;}
+  .chip{
+    flex:1;
+    position:relative;
+  }
+  .chip input{
+    position:absolute;
+    opacity:0;
+    inset:0;
+    cursor:pointer;
+    margin:0;
+  }
+  .chip .box{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:13px 10px;
+    border-radius:12px;
+    border:1.5px solid var(--line);
+    background:#f9fafe;
+    font-size:14px;
+    font-weight:600;
+    color:var(--muted);
+    transition:all .15s ease;
+  }
+  .chip input:checked + .box{
+    border-color:var(--blue);
+    background:linear-gradient(135deg, rgba(30,94,255,0.08), rgba(255,179,0,0.08));
+    color:var(--navy-deep);
+    box-shadow:0 0 0 4px rgba(30,94,255,0.1);
+  }
+  .chip input:focus-visible + .box{
+    outline:2px solid var(--blue);
+    outline-offset:2px;
+  }
+
+  .upload-box{
+    border:1.5px dashed var(--line);
+    border-radius:14px;
+    padding:26px 16px;
+    text-align:center;
+    background:#f9fafe;
+    cursor:pointer;
+    position:relative;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .upload-box.has-file{border-color:var(--amber-deep);background:#fff9ec;}
+  .upload-box input[type=file]{
+    position:absolute;inset:0;opacity:0;cursor:pointer;
+  }
+  .upload-box .icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:36px;height:36px;
+    border-radius:10px;
+    background:linear-gradient(135deg, var(--navy), var(--blue));
+    color:#fff;
+    font-size:16px;
+    margin-bottom:10px;
+  }
+  .upload-box .txt{
+    font-size:12.5px;
+    color:var(--muted);
+    font-weight:500;
+  }
+  .upload-preview{
+    margin-top:14px;
+    width:88px;height:110px;
+    object-fit:cover;
+    border-radius:10px;
+    border:1.5px solid var(--line);
+    display:none;
+  }
+
+  button.submit{
+    width:100%;
+    padding:16px;
+    background:linear-gradient(135deg, var(--navy-deep), var(--blue));
+    color:#fff;
+    border:none;
+    border-radius:14px;
+    font-size:14.5px;
+    letter-spacing:.02em;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:8px;
+    box-shadow:0 14px 26px -12px rgba(11,61,145,0.55);
+    transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+  }
+  button.submit:hover{filter:brightness(1.06); transform:translateY(-1px);}
+  button.submit:active{transform:translateY(0);}
+  button.submit:disabled{
+    background:#a9b3cc;
+    box-shadow:none;
+    cursor:not-allowed;
+    transform:none;
+  }
+
+  .status{
     margin-top:16px;
-    background:var(--maroon);
+    font-size:13.5px;
+    padding:15px 16px;
+    border-radius:12px;
+    display:none;
+  }
+  .status.show{display:block;}
+  .status.loading{background:#eef2fb;color:var(--navy-deep);border:1px solid #c9d6f7;}
+  .status.error{background:#fdecec;color:var(--err);border:1px solid #f6c1bd;}
+  .status.success{background:#eaf8f0;color:var(--ok);border:1px solid #b6e6c9;}
+  .status a.dl{
+    display:inline-block;
+    margin-top:10px;
+    background:linear-gradient(135deg, var(--ok), #17b56d);
     color:#fff;
     text-decoration:none;
-    font-size:13.5px;
-    font-weight:500;
-    padding:10px 18px;
-    border-radius:3px;
-    transition:background .15s;
+    padding:12px 20px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:13px;
   }
-  .unduh:hover{background:var(--maroon-deep);}
+  .spinner{
+    display:inline-block;
+    width:13px;height:13px;
+    border:2px solid #c9d6f7;
+    border-top-color:var(--navy-deep);
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+    margin-right:8px;
+    vertical-align:-2px;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  footer{
+    padding:22px 26px 34px;
+    font-size:11px;
+    color:var(--muted);
+    text-align:center;
+  }
+  footer strong{color:var(--navy-deep);}
+
+  @media(max-width:480px){
+    .row2{grid-template-columns:1fr;}
+    .hero{padding:36px 22px 56px;}
+    form{margin:-34px 14px 0; padding:24px 18px 26px;}
+  }
 </style>
 </head>
 <body>
-  <div class="halaman">
-    <div class="eyebrow">Registrasi Anggota</div>
-    <h1>Cek Kartu Anggota OSIS</h1>
-    <p class="sub">Masukkan NISN untuk melihat status dan mengunduh kartu.</p>
 
-    <form id="formCari">
-      <input type="text" id="inputNisn" placeholder="Contoh: 0051234567" inputmode="numeric" required>
-      <button type="submit" class="seal" aria-label="Cari kartu">CARI</button>
-    </form>
+<div class="page">
 
-    <div class="status" id="status"></div>
-
-    <div class="kartu" id="kartu">
-      <div class="kartu-label">Kartu Identitas Siswa</div>
-      <div class="kartu-nama" id="kNama">-</div>
-      <div class="kartu-baris"><span>Jenis Kelamin</span><span id="kJk">-</span></div>
-      <div class="kartu-baris"><span>Kompetensi</span><span id="kKompetensi">-</span></div>
-      <a class="unduh" id="kUnduh" href="#" target="_blank" rel="noopener">Unduh Kartu (PDF) ↓</a>
-    </div>
+  <div class="hero">
+    <span class="badge"><span class="dot"></span>Kartu Identitas Digital</span>
+    <h1>SMKS Ciledug<br>Al Musaddadiyah</h1>
+    <p>Isi data di bawah, kartu identitas kamu langsung jadi dan siap didownload dalam format PDF.</p>
   </div>
 
+  <form id="kartuForm">
+    <div class="field">
+      <label for="nama">Nama Lengkap <span class="req">*</span></label>
+      <input type="text" id="nama" required placeholder="Contoh: Aldi Nugraha">
+    </div>
+
+    <div class="field">
+      <label>Jenis Kelamin <span class="req">*</span></label>
+      <div class="radiogroup">
+        <label class="chip">
+          <input type="radio" name="jk" value="Laki-Laki" required>
+          <span class="box">Laki-Laki</span>
+        </label>
+        <label class="chip">
+          <input type="radio" name="jk" value="Perempuan">
+          <span class="box">Perempuan</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="nisn">NISN <span class="req">*</span></label>
+        <input type="text" id="nisn" required inputmode="numeric" placeholder="10 digit">
+      </div>
+      <div class="field">
+        <label for="kompetensi">Kompetensi Keahlian <span class="req">*</span></label>
+        <select id="kompetensi" required>
+          <option value="" disabled selected>Pilih jurusan</option>
+          <option value="Akuntansi">Akuntansi</option>
+          <option value="Manajemen Perkantoran">Manajemen Perkantoran</option>
+          <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
+          <option value="Teknik Komputer dan Jaringan">Teknik Komputer dan Jaringan</option>
+          <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+          <option value="Multimedia">Multimedia</option>
+          <option value="Farmasi">Farmasi</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field" id="kompetensiLainWrap" style="display:none;">
+      <label for="kompetensiLain">Sebutkan Kompetensi Keahlian</label>
+      <input type="text" id="kompetensiLain" placeholder="Tulis jurusan kamu">
+    </div>
+
+    <div class="field">
+      <label for="ttl">Tempat, Tanggal Lahir <span class="req">*</span></label>
+      <input type="text" id="ttl" required placeholder="Contoh: Garut, 20 Februari 2009">
+      <p class="hint">Format: Kota, Tanggal Bulan Tahun</p>
+    </div>
+
+    <div class="field">
+      <label for="alamat">Alamat <span class="req">*</span></label>
+      <input type="text" id="alamat" required placeholder="Contoh: Bayongbong, Garut, Jawa Barat">
+    </div>
+
+    <div class="field">
+      <label>Upload Pas Foto <span class="req">*</span></label>
+      <div class="upload-box" id="uploadBox">
+        <input type="file" id="foto" accept="image/*" required>
+        <span class="icon">↑</span>
+        <div class="txt" id="uploadTxt">Klik atau seret foto ke sini (JPG/PNG)</div>
+      </div>
+      <img id="preview" class="upload-preview" alt="Pratinjau foto">
+    </div>
+
+    <button type="submit" class="submit" id="submitBtn">Buat Kartu Identitas</button>
+
+    <div class="status" id="status"></div>
+  </form>
+
+  <footer>Jl. Mayor Syamsu No. 02 Jayaraga, Tarogong Kidul, Garut<br><strong>SMKS Ciledug Al Musaddadiyah</strong></footer>
+</div>
+
 <script>
-  // GANTI dengan URL Web App hasil deploy Apps Script kamu
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxjtUbvKOAXtjxAr40ZzqjzRGMgnTE0qd19ok3ISza_qaL5Iz65X6jzjkDWfdlMf0w0/exec";
+/* ============================================================
+   GANTI URL DI BAWAH INI dengan URL Web App Apps Script Anda
+   ============================================================ */
+const WEB_APP_URL = "GANTI_DENGAN_URL_WEB_APP_ANDA";
 
-  const form = document.getElementById('formCari');
-  const statusEl = document.getElementById('status');
-  const kartuEl = document.getElementById('kartu');
+const form = document.getElementById('kartuForm');
+const uploadBox = document.getElementById('uploadBox');
+const fotoInput = document.getElementById('foto');
+const uploadTxt = document.getElementById('uploadTxt');
+const preview = document.getElementById('preview');
+const statusBox = document.getElementById('status');
+const submitBtn = document.getElementById('submitBtn');
+const kompetensiSelect = document.getElementById('kompetensi');
+const kompetensiLainWrap = document.getElementById('kompetensiLainWrap');
+const kompetensiLainInput = document.getElementById('kompetensiLain');
 
-  form.addEventListener('submit', async function(ev){
-    ev.preventDefault();
-    const nisn = document.getElementById('inputNisn').value.trim();
-    if(!nisn) return;
+kompetensiSelect.addEventListener('change', () => {
+  if(kompetensiSelect.value === 'Lainnya'){
+    kompetensiLainWrap.style.display = 'block';
+    kompetensiLainInput.required = true;
+  } else {
+    kompetensiLainWrap.style.display = 'none';
+    kompetensiLainInput.required = false;
+  }
+});
 
-    statusEl.textContent = 'Mencari data...';
-    statusEl.className = 'status';
-    kartuEl.classList.remove('show');
+fotoInput.addEventListener('change', () => {
+  const file = fotoInput.files[0];
+  if(!file) return;
+  uploadBox.classList.add('has-file');
+  uploadTxt.textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
 
-    try{
-      const res = await fetch(APPS_SCRIPT_URL + '?nisn=' + encodeURIComponent(nisn));
-      const data = await res.json();
+function setStatus(type, html){
+  statusBox.className = 'status show ' + type;
+  statusBox.innerHTML = html;
+}
 
-      if(!data.found){
-        statusEl.textContent = 'NISN tidak ditemukan. Pastikan kamu sudah mengisi form pendaftaran.';
-        statusEl.className = 'status err';
-        return;
-      }
-
-      document.getElementById('kNama').textContent = data.nama || '-';
-      document.getElementById('kJk').textContent = data.jenisKelamin || '-';
-      document.getElementById('kKompetensi').textContent = data.kompetensi || '-';
-
-      if(data.pdfUrl){
-        document.getElementById('kUnduh').href = data.pdfUrl;
-        document.getElementById('kUnduh').style.display = 'inline-block';
-        statusEl.textContent = 'Kartu ditemukan.';
-      } else {
-        document.getElementById('kUnduh').style.display = 'none';
-        statusEl.textContent = 'Data ditemukan, kartu sedang diproses. Coba lagi beberapa saat.';
-      }
-      statusEl.className = 'status';
-      kartuEl.classList.add('show');
-
-    }catch(err){
-      statusEl.textContent = 'Gagal menghubungi server. Coba lagi.';
-      statusEl.className = 'status err';
-    }
+function fileToBase64(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
   });
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  if(WEB_APP_URL.indexOf('GANTI_DENGAN') !== -1){
+    setStatus('error', 'Halaman belum terhubung ke sistem. Hubungi admin sekolah.');
+    return;
+  }
+
+  const jkEl = form.querySelector('input[name="jk"]:checked');
+  if(!jkEl){
+    setStatus('error', 'Pilih jenis kelamin terlebih dahulu.');
+    return;
+  }
+  const file = fotoInput.files[0];
+  if(!file){
+    setStatus('error', 'Upload pas foto terlebih dahulu.');
+    return;
+  }
+
+  const kompetensiFinal = kompetensiSelect.value === 'Lainnya'
+    ? kompetensiLainInput.value.trim()
+    : kompetensiSelect.value;
+
+  if(!kompetensiFinal){
+    setStatus('error', 'Lengkapi kompetensi keahlian terlebih dahulu.');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  setStatus('loading', '<span class="spinner"></span>Membuat kartu identitas, mohon tunggu...');
+
+  try{
+    const fotoBase64 = await fileToBase64(file);
+
+    const payload = {
+      nama: document.getElementById('nama').value.trim(),
+      jk: jkEl.value,
+      nisn: document.getElementById('nisn').value.trim(),
+      ttl: document.getElementById('ttl').value.trim(),
+      kompetensi: kompetensiFinal,
+      alamat: document.getElementById('alamat').value.trim(),
+      fotoBase64: fotoBase64,
+      fotoMime: file.type || 'image/jpeg'
+    };
+
+    const res = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if(data.status === 'ok' && data.pdfBase64){
+      const byteChars = atob(data.pdfBase64);
+      const byteNumbers = new Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i++) {
+        byteNumbers[i] = byteChars.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      const blobUrl = URL.createObjectURL(blob);
+
+      setStatus('success',
+        'Kartu identitas berhasil dibuat. File hanya tersimpan di perangkat kamu.<br>' +
+        '<a class="dl" href="' + blobUrl + '" download="' + data.fileName + '">Download PDF</a>'
+      );
+      form.reset();
+      preview.style.display = 'none';
+      uploadBox.classList.remove('has-file');
+      uploadTxt.textContent = 'Klik atau seret foto ke sini (JPG/PNG)';
+      kompetensiLainWrap.style.display = 'none';
+    } else {
+      setStatus('error', 'Gagal membuat kartu: ' + (data.message || 'Terjadi kesalahan tidak diketahui.'));
+    }
+  } catch(err){
+    setStatus('error', 'Terjadi kesalahan koneksi: ' + err.message);
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
 </script>
+
 </body>
 </html>

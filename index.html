@@ -341,7 +341,8 @@
     <div class="row2">
       <div class="field">
         <label for="nisn">NISN <span class="req">*</span></label>
-        <input type="text" id="nisn" required inputmode="numeric" placeholder="10 digit">
+        <input type="text" id="nisn" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 digit">
+        <p class="hint" id="nisnHint">Harus tepat 10 digit angka</p>
       </div>
       <div class="field">
         <label for="kompetensi">Kompetensi Keahlian <span class="req">*</span></label>
@@ -372,7 +373,8 @@
 
     <div class="field">
       <label for="alamat">Alamat <span class="req">*</span></label>
-      <input type="text" id="alamat" required placeholder="Contoh: Bayongbong, Garut, Jawa Barat">
+      <input type="text" id="alamat" required maxlength="120" placeholder="Contoh: Bayongbong, Garut, Jawa Barat">
+      <p class="hint" id="alamatHint">0/120 karakter</p>
     </div>
 
     <div class="field">
@@ -409,6 +411,33 @@ const submitBtn = document.getElementById('submitBtn');
 const kompetensiSelect = document.getElementById('kompetensi');
 const kompetensiLainWrap = document.getElementById('kompetensiLainWrap');
 const kompetensiLainInput = document.getElementById('kompetensiLain');
+const nisnInput = document.getElementById('nisn');
+const nisnHint = document.getElementById('nisnHint');
+const alamatInput = document.getElementById('alamat');
+const alamatHint = document.getElementById('alamatHint');
+const ALAMAT_MAX = 120;
+
+// === Validasi NISN: hanya angka, otomatis dibatasi 10 digit ===
+nisnInput.addEventListener('input', () => {
+  nisnInput.value = nisnInput.value.replace(/\D/g, '').slice(0, 10);
+  if(nisnInput.value.length === 0){
+    nisnHint.textContent = 'Harus tepat 10 digit angka';
+    nisnHint.style.color = '';
+  } else if(nisnInput.value.length < 10){
+    nisnHint.textContent = 'Kurang ' + (10 - nisnInput.value.length) + ' digit lagi';
+    nisnHint.style.color = 'var(--err)';
+  } else {
+    nisnHint.textContent = 'NISN valid (10 digit)';
+    nisnHint.style.color = 'var(--ok)';
+  }
+});
+
+// === Validasi Alamat: penghitung karakter, batas maksimal ===
+alamatInput.addEventListener('input', () => {
+  const len = alamatInput.value.length;
+  alamatHint.textContent = len + '/' + ALAMAT_MAX + ' karakter';
+  alamatHint.style.color = len >= ALAMAT_MAX ? 'var(--err)' : '';
+});
 
 kompetensiSelect.addEventListener('change', () => {
   if(kompetensiSelect.value === 'Lainnya'){
@@ -475,6 +504,25 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
+  const nisnVal = nisnInput.value.trim();
+  if(!/^[0-9]{10}$/.test(nisnVal)){
+    setStatus('error', 'NISN harus tepat 10 digit angka.');
+    nisnInput.focus();
+    return;
+  }
+
+  const alamatVal = alamatInput.value.trim();
+  if(!alamatVal){
+    setStatus('error', 'Alamat tidak boleh kosong.');
+    alamatInput.focus();
+    return;
+  }
+  if(alamatVal.length > ALAMAT_MAX){
+    setStatus('error', 'Alamat maksimal ' + ALAMAT_MAX + ' karakter.');
+    alamatInput.focus();
+    return;
+  }
+
   submitBtn.disabled = true;
   setStatus('loading', '<span class="spinner"></span>Membuat kartu identitas, mohon tunggu...');
 
@@ -519,6 +567,10 @@ form.addEventListener('submit', async (e) => {
       uploadBox.classList.remove('has-file');
       uploadTxt.textContent = 'Klik atau seret foto ke sini (JPG/PNG)';
       kompetensiLainWrap.style.display = 'none';
+      nisnHint.textContent = 'Harus tepat 10 digit angka';
+      nisnHint.style.color = '';
+      alamatHint.textContent = '0/' + ALAMAT_MAX + ' karakter';
+      alamatHint.style.color = '';
     } else {
       setStatus('error', 'Gagal membuat kartu: ' + (data.message || 'Terjadi kesalahan tidak diketahui.'));
     }

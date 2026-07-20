@@ -306,6 +306,138 @@
     .hero{padding:36px 22px 56px;}
     form{margin:-34px 14px 0; padding:24px 18px 26px;}
   }
+
+  /* ===== Photo requirement quick-note (link to FAQ) ===== */
+  .faq-note{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:10px;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--navy);
+    text-decoration:none;
+    border-bottom:1px dashed var(--navy);
+    padding-bottom:1px;
+  }
+  .faq-note:hover{color:var(--blue); border-color:var(--blue);}
+
+  /* ===== FAQ / Ketentuan section ===== */
+  .faq-section{
+    margin:34px 20px 0;
+    padding:26px 22px 30px;
+    background:var(--surface);
+    border-radius:20px;
+    border:1px solid var(--line);
+    box-shadow:0 20px 45px -25px rgba(7,31,77,0.18);
+  }
+  .faq-section .faq-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .faq-section .faq-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:34px;height:34px;
+    border-radius:10px;
+    background:linear-gradient(135deg, var(--navy), var(--blue));
+    color:#fff;
+    font-size:15px;
+    flex-shrink:0;
+  }
+  .faq-section h2{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:18px;
+    font-weight:700;
+    color:var(--navy-deep);
+    margin:0;
+    letter-spacing:-.01em;
+  }
+  .faq-section .faq-sub{
+    font-size:12.5px;
+    color:var(--muted);
+    margin:0 0 18px;
+    line-height:1.5;
+  }
+
+  .faq-item{
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    margin-bottom:10px;
+    background:#f9fafe;
+    overflow:hidden;
+  }
+  .faq-item[open]{
+    border-color:var(--blue);
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(30,94,255,0.08);
+  }
+  .faq-item summary{
+    list-style:none;
+    cursor:pointer;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--navy-deep);
+    user-select:none;
+  }
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary .emoji{font-size:15px; flex-shrink:0;}
+  .faq-item summary .chev{
+    margin-left:auto;
+    width:20px;height:20px;
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--line);
+    color:var(--muted);
+    font-size:12px;
+    transition:transform .18s ease, background .18s ease, color .18s ease;
+  }
+  .faq-item[open] summary .chev{
+    transform:rotate(45deg);
+    background:var(--blue);
+    color:#fff;
+  }
+  .faq-item .faq-body{
+    padding:0 16px 16px 40px;
+    font-size:12.5px;
+    color:var(--muted);
+    line-height:1.65;
+  }
+  .faq-item .faq-body p{margin:0 0 8px;}
+  .faq-item .faq-body p:last-child{margin-bottom:0;}
+  .faq-item .faq-body ul{
+    margin:0 0 8px;
+    padding-left:18px;
+  }
+  .faq-item .faq-body ul:last-child{margin-bottom:0;}
+  .faq-item .faq-body li{margin-bottom:6px;}
+  .faq-item .faq-body li:last-child{margin-bottom:0;}
+  .faq-item .faq-body strong{color:var(--ink);}
+  .faq-item .faq-body .tag{
+    display:inline-block;
+    font-size:10.5px;
+    font-weight:700;
+    color:var(--amber-deep);
+    background:#fff3d9;
+    border:1px solid #ffe3a3;
+    padding:1px 7px;
+    border-radius:999px;
+    margin-right:4px;
+  }
+
+  @media(max-width:480px){
+    .faq-section{margin:26px 14px 0; padding:22px 16px 24px;}
+  }
 </style>
 </head>
 <body>
@@ -385,12 +517,93 @@
         <div class="txt" id="uploadTxt">Klik atau seret foto ke sini (JPG/PNG)</div>
       </div>
       <img id="preview" class="upload-preview" alt="Pratinjau foto">
+      <a href="#faq" class="faq-note">📖 Lihat ketentuan foto sebelum upload</a>
     </div>
 
     <button type="submit" class="submit" id="submitBtn">Buat Kartu Identitas</button>
 
     <div class="status" id="status"></div>
   </form>
+
+  <section class="faq-section" id="faq">
+    <div class="faq-head">
+      <span class="faq-icon">❔</span>
+      <h2>Ketentuan &amp; FAQ Kartu Pelajar</h2>
+    </div>
+    <p class="faq-sub">Baca ketentuan berikut sebelum mengisi form, agar kartu identitas kamu bisa langsung diproses tanpa revisi.</p>
+
+    <details class="faq-item" open>
+      <summary><span class="emoji">📸</span>Ketentuan Pas Foto<span class="chev">+</span></summary>
+      <div class="faq-body">
+        <ul>
+          <li><strong>Wajib mengenakan seragam sekolah resmi</strong> (bukan baju bebas, kaos olahraga, atau jaket luar).</li>
+          <li>Foto merupakan <strong>foto terbaru</strong>, maksimal 6 bulan terakhir dan menyerupai wajah asli saat ini.</li>
+          <li>Latar belakang polos, <strong>disarankan warna merah</strong>, tanpa objek atau bayangan mengganggu.</li>
+          <li>Wajah menghadap kamera, terlihat penuh dan jelas — <strong>tanpa masker, kacamata hitam, topi, atau filter/edit wajah</strong> berlebihan.</li>
+          <li>Orientasi foto <strong>vertikal (potret)</strong>, mendekati rasio 3x4, agar tidak terpotong saat dicetak.</li>
+          <li>Format file <span class="tag">JPG</span> <span class="tag">PNG</span>, gambar tidak buram/pecah (disarankan resolusi minimal 400×600 piksel).</li>
+          <li>Pencahayaan cukup terang dan merata, hindari foto gelap, silau, atau blur.</li>
+        </ul>
+        <p>Foto yang tidak memenuhi ketentuan di atas berpotensi <strong>ditolak/diminta upload ulang</strong> oleh Tata Usaha sebelum kartu dicetak.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary><span class="emoji">📝</span>Ketentuan Pengisian Data<span class="chev">+</span></summary>
+      <div class="faq-body">
+        <ul>
+          <li><strong>Nama lengkap</strong> harus sesuai Kartu Keluarga (KK)/Akta Kelahiran/Ijazah — tanpa singkatan.</li>
+          <li><strong>NISN</strong> diisi tepat 10 digit angka sesuai data resmi Dapodik. Salah satu digit saja bisa membuat kartu ditolak sistem sekolah/Dapodik.</li>
+          <li><strong>Tempat, Tanggal Lahir</strong> diisi dengan format <em>Kota, Tanggal Bulan Tahun</em> (contoh: Garut, 20 Februari 2009).</li>
+          <li><strong>Kompetensi Keahlian</strong> dipilih sesuai jurusan aktif saat ini; siswa lintas jurusan pilih <em>Lainnya</em> lalu tulis manual.</li>
+          <li><strong>Alamat</strong> diisi sesuai domisili pada KK, maksimal 120 karakter, cukup jelas (kecamatan/kabupaten/provinsi).</li>
+          <li>Seluruh data yang diisi menjadi <strong>tanggung jawab siswa</strong>; sekolah mencetak kartu sesuai data yang dikirim melalui form ini.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary><span class="emoji">⚙️</span>Proses &amp; Waktu Pembuatan Kartu<span class="chev">+</span></summary>
+      <div class="faq-body">
+        <ul>
+          <li>Setelah tombol <strong>"Buat Kartu Identitas"</strong> ditekan, sistem otomatis menyusun kartu dan file <strong>PDF bisa langsung diunduh</strong> di perangkat kamu.</li>
+          <li>File PDF hasil unduhan <strong>tidak disimpan di server</strong> — pastikan menyimpan/mem-backup file tersebut setelah proses selesai.</li>
+          <li>Untuk kebutuhan <strong>kartu fisik (cetak + laminating)</strong>, hasil PDF diserahkan ke Tata Usaha sesuai jadwal cetak yang ditentukan sekolah.</li>
+          <li>Jika muncul pesan gagal/error, cek kembali koneksi internet lalu ulangi pengisian; jika masih gagal hubungi admin sekolah.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary><span class="emoji">🪪</span>Ketentuan Fisik Kartu<span class="chev">+</span></summary>
+      <div class="faq-body">
+        <ul>
+          <li>Kartu dicetak dalam ukuran standar kartu identitas (kurang lebih sebesar kartu ATM).</li>
+          <li>Kartu berlaku selama siswa terdaftar aktif di SMKS Ciledug Al Musaddadiyah.</li>
+          <li>Kartu wajib dibawa saat kegiatan resmi sekolah (ujian, praktik kerja lapangan, kunjungan industri, dsb) sesuai ketentuan yang berlaku.</li>
+          <li>Dilarang mencoret, melubangi, atau mengubah tampilan kartu di luar ketentuan sekolah.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary><span class="emoji">🔁</span>Revisi Data &amp; Kartu Hilang/Rusak<span class="chev">+</span></summary>
+      <div class="faq-body">
+        <ul>
+          <li>Jika ada kesalahan data pada hasil PDF (nama, NISN, foto, dsb), segera isi ulang form dengan data yang benar sebelum diserahkan ke Tata Usaha.</li>
+          <li>Untuk kartu fisik yang sudah tercetak, laporkan kesalahan ke Tata Usaha untuk proses cetak ulang.</li>
+          <li>Kehilangan atau kerusakan kartu fisik dilaporkan ke wali kelas/Tata Usaha untuk pengajuan cetak ulang sesuai ketentuan sekolah yang berlaku.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary><span class="emoji">☎️</span>Bantuan &amp; Kontak<span class="chev">+</span></summary>
+      <div class="faq-body">
+        <p>Mengalami kendala saat mengisi form atau mencetak kartu? Hubungi <strong>Tata Usaha (TU)</strong> atau <strong>wali kelas</strong> masing-masing di lingkungan SMKS Ciledug Al Musaddadiyah, Jl. Mayor Syamsu No. 02 Jayaraga, Tarogong Kidul, Garut.</p>
+      </div>
+    </details>
+  </section>
 
   <footer>Jl. Mayor Syamsu No. 02 Jayaraga, Tarogong Kidul, Garut<br><strong>SMKS Ciledug Al Musaddadiyah</strong></footer>
 </div>

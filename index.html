@@ -6,26 +6,26 @@
 <title>Kartu Identitas Siswa — SMKS Ciledug Al Musaddadiyah</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0b3d91;
-    --navy-deep:#071f4d;
-    --navy-ink:#050f2e;
-    --blue:#1e5eff;
+    --navy:#2563eb;
+    --navy-deep:#1447c4;
+    --navy-ink:#0d3aa8;
+    --blue:#4d9bff;
     --amber:#ffb300;
     --amber-deep:#e69f00;
     --amber-soft:#f6cd6b;
-    --bg:#eef1f8;
+    --bg:#eaf4ff;
     --surface:#ffffff;
     --ink:#0f1a33;
-    --muted:#5c6b8a;
-    --line:#e3e8f3;
+    --muted:#5c7699;
+    --line:#d9e8fb;
     --line-gold:rgba(230,159,0,.35);
     --ok:#1c9a5b;
     --err:#c9463a;
-    --serif:'Playfair Display',serif;
-    --sans:'Inter',sans-serif;
+    --serif:'Plus Jakarta Sans',sans-serif;
+    --sans:'Plus Jakarta Sans',sans-serif;
     --mono:'IBM Plex Mono',monospace;
   }
   *{box-sizing:border-box;}
@@ -63,7 +63,7 @@
     max-width:580px;
     min-height:100vh;
     background:var(--surface);
-    box-shadow:0 40px 90px -35px rgba(5,15,46,.35);
+    box-shadow:0 40px 90px -35px rgba(20,71,196,.35);
     position:relative;
   }
 
@@ -159,7 +159,7 @@
     background:
       radial-gradient(420px 200px at 100% 0%, rgba(255,179,0,.16), transparent 60%),
       linear-gradient(155deg, var(--navy-ink), var(--navy) 80%);
-    box-shadow:0 26px 50px -22px rgba(5,15,46,.55), 0 0 0 1px rgba(255,255,255,.06) inset;
+    box-shadow:0 26px 50px -22px rgba(20,71,196,.55), 0 0 0 1px rgba(255,255,255,.06) inset;
     color:#fff;
     overflow:hidden;
   }
@@ -376,7 +376,7 @@
     outline:none;
     border-color:var(--navy);
     background:#fff;
-    box-shadow:0 0 0 3.5px rgba(11,61,145,.10);
+    box-shadow:0 0 0 3.5px rgba(37,99,235,.10);
   }
   .field .hint{
     font-size:11px;
@@ -402,9 +402,9 @@
   }
   .chip input:checked + .box{
     border-color:var(--navy);
-    background:linear-gradient(135deg, rgba(11,61,145,.06), rgba(255,179,0,.08));
+    background:linear-gradient(135deg, rgba(37,99,235,.06), rgba(255,179,0,.08));
     color:var(--navy-deep);
-    box-shadow:0 0 0 3.5px rgba(11,61,145,.08);
+    box-shadow:0 0 0 3.5px rgba(37,99,235,.08);
   }
   .chip input:focus-visible + .box{outline:2px solid var(--blue); outline-offset:2px;}
 
@@ -463,7 +463,7 @@
     text-transform:uppercase;
     cursor:pointer;
     margin-top:6px;
-    box-shadow:0 16px 28px -14px rgba(11,61,145,.55);
+    box-shadow:0 16px 28px -14px rgba(37,99,235,.55);
     transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
     position:relative;
     overflow:hidden;
@@ -540,17 +540,103 @@
   }
   @keyframes spin{to{transform:rotate(360deg);}}
 
+  /* ===================== DAFTAR SISWA ===================== */
+  .student-list-section{margin:44px 26px 0;}
+  .student-list-section .student-list-sub{
+    font-size:12px;
+    color:var(--muted);
+    margin:6px 0 20px;
+    line-height:1.6;
+  }
+
+  .student-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(128px, 1fr));
+    gap:14px;
+  }
+  .student-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px;
+    text-align:center;
+    box-shadow:0 10px 22px -18px rgba(20,71,196,.28);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .student-card:hover{transform:translateY(-3px); box-shadow:0 16px 26px -16px rgba(20,71,196,.32);}
+  .student-photo{
+    width:100%;
+    aspect-ratio:3/4;
+    border-radius:10px;
+    background:linear-gradient(135deg, rgba(37,99,235,.08), rgba(255,179,0,.10));
+    overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px;
+    margin-bottom:10px;
+    color:var(--muted);
+  }
+  .student-photo img{width:100%; height:100%; object-fit:cover; display:block;}
+  .student-name{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:12.5px;
+    color:var(--navy-deep);
+    line-height:1.3;
+    margin-bottom:4px;
+    word-break:break-word;
+  }
+  .student-nisn{
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--muted);
+    letter-spacing:.03em;
+    margin-bottom:7px;
+  }
+  .student-jurusan{
+    display:inline-block;
+    font-size:9.5px;
+    font-weight:700;
+    color:var(--navy-deep);
+    background:rgba(37,99,235,.08);
+    border:1px solid rgba(37,99,235,.18);
+    padding:3px 9px;
+    border-radius:999px;
+    line-height:1.4;
+  }
+
+  .student-list-empty{
+    text-align:center;
+    font-size:12.5px;
+    color:var(--muted);
+    padding:26px 14px;
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    line-height:1.6;
+  }
+
+  /* skeleton loading */
+  .student-card.skeleton{cursor:default;}
+  .student-card.skeleton .student-photo{background:var(--bg);}
+  .skeleton-line{
+    height:9px; border-radius:5px; background:var(--bg);
+    margin:0 auto 6px;
+    animation:pulseFade 1.2s ease-in-out infinite;
+  }
+  .skeleton-line.w70{width:70%;}
+  .skeleton-line.w50{width:45%;}
+  @keyframes pulseFade{0%,100%{opacity:.45;}50%{opacity:1;}}
+
   /* ===================== FAQ ===================== */
   .cek-status-section{
     position:relative;
     margin:38px 26px 0;
     padding:22px 22px 24px;
     background:
-      radial-gradient(420px 160px at 100% 0%, rgba(11,61,145,.05), transparent 60%),
+      radial-gradient(420px 160px at 100% 0%, rgba(37,99,235,.05), transparent 60%),
       var(--surface);
     border:1.5px solid var(--line);
     border-radius:16px;
-    box-shadow:0 18px 34px -26px rgba(5,15,46,.28);
+    box-shadow:0 18px 34px -26px rgba(20,71,196,.28);
     overflow:hidden;
   }
   /* garis perforasi + notch, meniru sobekan tiket/slip pelacakan */
@@ -635,13 +721,13 @@
     user-select:none;
     transition:background .15s ease;
   }
-  .faq-item summary:hover{background:rgba(11,61,145,.035);}
+  .faq-item summary:hover{background:rgba(37,99,235,.035);}
   .faq-item summary::-webkit-details-marker{display:none;}
   .faq-item summary .emoji{
     width:28px; height:28px;
     flex-shrink:0;
     border-radius:7px;
-    background:linear-gradient(135deg, rgba(11,61,145,.08), rgba(255,179,0,.10));
+    background:linear-gradient(135deg, rgba(37,99,235,.08), rgba(255,179,0,.10));
     display:flex; align-items:center; justify-content:center;
     font-size:13px;
   }
@@ -713,8 +799,29 @@
     .card-dock{margin:-84px 16px 0;}
     form{margin:26px 16px 0;}
     .cek-status-section{margin:26px 16px 0;}
+    .student-list-section{margin:38px 16px 0;}
     .faq-section{margin:38px 16px 0;}
     footer{padding:28px 20px 32px;}
+    .student-grid{grid-template-columns:repeat(auto-fill, minmax(104px, 1fr)); gap:10px;}
+  }
+
+  /* ===================== DESKTOP / LAYAR LEBAR ===================== */
+  @media(min-width:860px){
+    body{padding:40px 20px;}
+    .page{
+      max-width:760px;
+      min-height:auto;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 50px 110px -40px rgba(20,71,196,.4);
+    }
+    .hero{padding:52px 52px 128px;}
+    .hero h1{font-size:38px;}
+    .card-dock{margin:-96px 44px 0;}
+    form, .cek-status-section, .student-list-section, .faq-section{margin-left:44px; margin-right:44px;}
+    .row2{gap:18px;}
+    .student-grid{grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:16px;}
+    footer{padding:40px 44px 46px;}
   }
 </style>
 </head>
@@ -861,6 +968,13 @@
     </div>
     <button type="button" class="submit alt" id="cekStatusBtn">Cek Status</button>
     <div class="status" id="cekStatusResult"></div>
+  </section>
+
+  <section class="student-list-section" id="daftarSiswa">
+    <div class="section-label"><span class="num">🪪</span>Kartu Identitas yang Sudah Disetujui</div>
+    <p class="student-list-sub">Galeri siswa yang pengajuan kartu identitasnya sudah disetujui admin dan siap dicetak.</p>
+    <div class="student-grid" id="studentGrid"></div>
+    <div class="student-list-empty" id="studentListEmpty" style="display:none;"></div>
   </section>
 
   <section class="faq-section" id="faq">
@@ -1201,6 +1315,90 @@ cekStatusBtn.addEventListener('click', async () => {
     cekStatusBtn.disabled = false;
   }
 });
+
+// ============================================================
+// DAFTAR SISWA — galeri siswa yang kartunya sudah disetujui admin
+// (action 'daftar_kartu'), hanya menampilkan data yang memang
+// dikirim server: foto, nama, NISN, jurusan.
+// ============================================================
+const studentGrid = document.getElementById('studentGrid');
+const studentListEmpty = document.getElementById('studentListEmpty');
+
+function escapeHtml(str){
+  return (str || '').toString()
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function skeletonSiswaHTML(jumlah){
+  let html = '';
+  for(let i = 0; i < jumlah; i++){
+    html += '<div class="student-card skeleton">' +
+      '<div class="student-photo"></div>' +
+      '<div class="skeleton-line w70"></div>' +
+      '<div class="skeleton-line w50"></div>' +
+    '</div>';
+  }
+  return html;
+}
+
+function tampilkanDaftarSiswa(daftar){
+  if(!daftar || !daftar.length){
+    studentGrid.innerHTML = '';
+    studentListEmpty.style.display = 'block';
+    studentListEmpty.textContent = 'Belum ada kartu identitas yang disetujui.';
+    return;
+  }
+  studentListEmpty.style.display = 'none';
+  studentGrid.innerHTML = daftar.map(function(s){
+    const namaAman = escapeHtml(s.nama || '-');
+    const fotoHtml = s.fotoUrl
+      ? '<img src="' + escapeHtml(s.fotoUrl) + '" alt="Foto ' + namaAman + '" loading="lazy" onerror="this.parentElement.innerHTML=\'🪪\';">'
+      : '🪪';
+    return '' +
+      '<div class="student-card">' +
+        '<div class="student-photo">' + fotoHtml + '</div>' +
+        '<div class="student-name">' + namaAman + '</div>' +
+        '<div class="student-nisn">' + escapeHtml(s.nisn || '-') + '</div>' +
+        '<span class="student-jurusan">' + escapeHtml(s.kompetensi || '-') + '</span>' +
+      '</div>';
+  }).join('');
+}
+
+async function muatDaftarSiswa(){
+  if(WEB_APP_URL.indexOf('GANTI_DENGAN') !== -1){
+    studentGrid.innerHTML = '';
+    studentListEmpty.style.display = 'block';
+    studentListEmpty.textContent = 'Daftar belum tersedia. Hubungi admin sekolah.';
+    return;
+  }
+
+  studentGrid.innerHTML = skeletonSiswaHTML(6);
+  studentListEmpty.style.display = 'none';
+
+  try{
+    const res = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'daftar_kartu' })
+    });
+    const data = await res.json();
+
+    if(data.status === 'ok' && Array.isArray(data.daftar)){
+      tampilkanDaftarSiswa(data.daftar);
+    } else {
+      studentGrid.innerHTML = '';
+      studentListEmpty.style.display = 'block';
+      studentListEmpty.textContent = 'Gagal memuat daftar siswa. Coba muat ulang halaman.';
+    }
+  } catch(err){
+    studentGrid.innerHTML = '';
+    studentListEmpty.style.display = 'block';
+    studentListEmpty.textContent = 'Gagal memuat daftar siswa: koneksi bermasalah.';
+  }
+}
+
+muatDaftarSiswa();
 </script>
 
 <script>

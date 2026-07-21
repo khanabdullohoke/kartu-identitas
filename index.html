@@ -549,50 +549,39 @@
     line-height:1.6;
   }
 
-  .student-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(128px, 1fr));
-    gap:14px;
-  }
-  .student-card{
-    background:var(--surface);
+  .student-table-wrap{
     border:1px solid var(--line);
     border-radius:14px;
-    padding:12px;
-    text-align:center;
-    box-shadow:0 10px 22px -18px rgba(20,71,196,.28);
-    transition:transform .15s ease, box-shadow .15s ease;
-  }
-  .student-card:hover{transform:translateY(-3px); box-shadow:0 16px 26px -16px rgba(20,71,196,.32);}
-  .student-photo{
-    width:100%;
-    aspect-ratio:3/4;
-    border-radius:10px;
-    background:linear-gradient(135deg, rgba(37,99,235,.08), rgba(255,179,0,.10));
     overflow:hidden;
-    display:flex; align-items:center; justify-content:center;
-    font-size:24px;
-    margin-bottom:10px;
-    color:var(--muted);
+    box-shadow:0 10px 22px -18px rgba(20,71,196,.28);
   }
-  .student-photo img{width:100%; height:100%; object-fit:cover; display:block;}
-  .student-name{
-    font-family:var(--serif);
-    font-weight:700;
+  .student-table{
+    width:100%;
+    border-collapse:collapse;
     font-size:12.5px;
-    color:var(--navy-deep);
-    line-height:1.3;
-    margin-bottom:4px;
-    word-break:break-word;
   }
-  .student-nisn{
-    font-family:var(--mono);
-    font-size:10px;
-    color:var(--muted);
-    letter-spacing:.03em;
-    margin-bottom:7px;
+  .student-table thead th{
+    text-align:left;
+    background:linear-gradient(135deg, var(--navy-ink), var(--navy));
+    color:var(--amber-soft);
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:12px 14px;
   }
-  .student-jurusan{
+  .student-table tbody td{
+    padding:11px 14px;
+    border-top:1px solid var(--line);
+    color:var(--ink);
+    vertical-align:middle;
+  }
+  .student-table tbody tr:nth-child(even){background:var(--bg);}
+  .student-table tbody tr:hover{background:rgba(37,99,235,.06);}
+  .student-table .col-nama{font-weight:700; color:var(--navy-deep);}
+  .student-table .col-nisn{font-family:var(--mono); letter-spacing:.03em; color:var(--muted); white-space:nowrap;}
+  .student-table .col-jurusan{
     display:inline-block;
     font-size:9.5px;
     font-weight:700;
@@ -601,8 +590,17 @@
     border:1px solid rgba(37,99,235,.18);
     padding:3px 9px;
     border-radius:999px;
-    line-height:1.4;
+    white-space:nowrap;
   }
+  .student-table tbody tr.skeleton td{padding:13px 14px;}
+  .student-table .skeleton-bar{
+    height:9px; border-radius:5px; background:var(--bg);
+    animation:pulseFade 1.2s ease-in-out infinite;
+  }
+  .student-table .skeleton-bar.w80{width:80%;}
+  .student-table .skeleton-bar.w60{width:60%;}
+  .student-table .skeleton-bar.w40{width:40%;}
+  @keyframes pulseFade{0%,100%{opacity:.45;}50%{opacity:1;}}
 
   .student-list-empty{
     text-align:center;
@@ -613,18 +611,6 @@
     border-radius:12px;
     line-height:1.6;
   }
-
-  /* skeleton loading */
-  .student-card.skeleton{cursor:default;}
-  .student-card.skeleton .student-photo{background:var(--bg);}
-  .skeleton-line{
-    height:9px; border-radius:5px; background:var(--bg);
-    margin:0 auto 6px;
-    animation:pulseFade 1.2s ease-in-out infinite;
-  }
-  .skeleton-line.w70{width:70%;}
-  .skeleton-line.w50{width:45%;}
-  @keyframes pulseFade{0%,100%{opacity:.45;}50%{opacity:1;}}
 
   /* ===================== FAQ ===================== */
   .cek-status-section{
@@ -802,7 +788,9 @@
     .student-list-section{margin:38px 16px 0;}
     .faq-section{margin:38px 16px 0;}
     footer{padding:28px 20px 32px;}
-    .student-grid{grid-template-columns:repeat(auto-fill, minmax(104px, 1fr)); gap:10px;}
+    .student-table-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+    .student-table{font-size:11.5px;}
+    .student-table thead th, .student-table tbody td{padding:9px 10px;}
   }
 
   /* ===================== DESKTOP / LAYAR LEBAR ===================== */
@@ -820,7 +808,7 @@
     .card-dock{margin:-96px 44px 0;}
     form, .cek-status-section, .student-list-section, .faq-section{margin-left:44px; margin-right:44px;}
     .row2{gap:18px;}
-    .student-grid{grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:16px;}
+    .student-table thead th, .student-table tbody td{padding:13px 18px;}
     footer{padding:40px 44px 46px;}
   }
 </style>
@@ -972,8 +960,15 @@
 
   <section class="student-list-section" id="daftarSiswa">
     <div class="section-label"><span class="num">🪪</span>Kartu Identitas yang Sudah Disetujui</div>
-    <p class="student-list-sub">Galeri siswa yang pengajuan kartu identitasnya sudah disetujui admin dan siap dicetak.</p>
-    <div class="student-grid" id="studentGrid"></div>
+    <p class="student-list-sub">Daftar siswa yang pengajuan kartu identitasnya sudah disetujui admin dan siap dicetak. Foto tidak ditampilkan demi menjaga privasi.</p>
+    <div class="student-table-wrap">
+      <table class="student-table">
+        <thead>
+          <tr><th>Nama</th><th>NISN</th><th>Jurusan</th></tr>
+        </thead>
+        <tbody id="studentTableBody"></tbody>
+      </table>
+    </div>
     <div class="student-list-empty" id="studentListEmpty" style="display:none;"></div>
   </section>
 
@@ -1321,7 +1316,8 @@ cekStatusBtn.addEventListener('click', async () => {
 // (action 'daftar_kartu'), hanya menampilkan data yang memang
 // dikirim server: foto, nama, NISN, jurusan.
 // ============================================================
-const studentGrid = document.getElementById('studentGrid');
+const studentTableWrap = document.querySelector('.student-table-wrap');
+const studentTableBody = document.getElementById('studentTableBody');
 const studentListEmpty = document.getElementById('studentListEmpty');
 
 function escapeHtml(str){
@@ -1333,48 +1329,45 @@ function escapeHtml(str){
 function skeletonSiswaHTML(jumlah){
   let html = '';
   for(let i = 0; i < jumlah; i++){
-    html += '<div class="student-card skeleton">' +
-      '<div class="student-photo"></div>' +
-      '<div class="skeleton-line w70"></div>' +
-      '<div class="skeleton-line w50"></div>' +
-    '</div>';
+    html += '<tr class="skeleton">' +
+      '<td><div class="skeleton-bar w80"></div></td>' +
+      '<td><div class="skeleton-bar w60"></div></td>' +
+      '<td><div class="skeleton-bar w40"></div></td>' +
+    '</tr>';
   }
   return html;
 }
 
 function tampilkanDaftarSiswa(daftar){
   if(!daftar || !daftar.length){
-    studentGrid.innerHTML = '';
+    studentTableWrap.style.display = 'none';
     studentListEmpty.style.display = 'block';
     studentListEmpty.textContent = 'Belum ada kartu identitas yang disetujui.';
     return;
   }
+  studentTableWrap.style.display = 'block';
   studentListEmpty.style.display = 'none';
-  studentGrid.innerHTML = daftar.map(function(s){
-    const namaAman = escapeHtml(s.nama || '-');
-    const fotoHtml = s.fotoUrl
-      ? '<img src="' + escapeHtml(s.fotoUrl) + '" alt="Foto ' + namaAman + '" loading="lazy" onerror="this.parentElement.innerHTML=\'🪪\';">'
-      : '🪪';
+  studentTableBody.innerHTML = daftar.map(function(s){
     return '' +
-      '<div class="student-card">' +
-        '<div class="student-photo">' + fotoHtml + '</div>' +
-        '<div class="student-name">' + namaAman + '</div>' +
-        '<div class="student-nisn">' + escapeHtml(s.nisn || '-') + '</div>' +
-        '<span class="student-jurusan">' + escapeHtml(s.kompetensi || '-') + '</span>' +
-      '</div>';
+      '<tr>' +
+        '<td class="col-nama">' + escapeHtml(s.nama || '-') + '</td>' +
+        '<td class="col-nisn">' + escapeHtml(s.nisn || '-') + '</td>' +
+        '<td><span class="col-jurusan">' + escapeHtml(s.kompetensi || '-') + '</span></td>' +
+      '</tr>';
   }).join('');
 }
 
 async function muatDaftarSiswa(){
   if(WEB_APP_URL.indexOf('GANTI_DENGAN') !== -1){
-    studentGrid.innerHTML = '';
+    studentTableWrap.style.display = 'none';
     studentListEmpty.style.display = 'block';
     studentListEmpty.textContent = 'Daftar belum tersedia. Hubungi admin sekolah.';
     return;
   }
 
-  studentGrid.innerHTML = skeletonSiswaHTML(6);
+  studentTableWrap.style.display = 'block';
   studentListEmpty.style.display = 'none';
+  studentTableBody.innerHTML = skeletonSiswaHTML(5);
 
   try{
     const res = await fetch(WEB_APP_URL, {
@@ -1387,12 +1380,12 @@ async function muatDaftarSiswa(){
     if(data.status === 'ok' && Array.isArray(data.daftar)){
       tampilkanDaftarSiswa(data.daftar);
     } else {
-      studentGrid.innerHTML = '';
+      studentTableWrap.style.display = 'none';
       studentListEmpty.style.display = 'block';
       studentListEmpty.textContent = 'Gagal memuat daftar siswa. Coba muat ulang halaman.';
     }
   } catch(err){
-    studentGrid.innerHTML = '';
+    studentTableWrap.style.display = 'none';
     studentListEmpty.style.display = 'block';
     studentListEmpty.textContent = 'Gagal memuat daftar siswa: koneksi bermasalah.';
   }

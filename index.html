@@ -30,6 +30,8 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  html{-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+  ::selection{background:var(--amber-soft); color:var(--navy-ink);}
   body{
     min-height:100vh;
     font-family:var(--sans);
@@ -39,6 +41,22 @@
     align-items:flex-start;
     justify-content:center;
   }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  @keyframes riseIn{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .hero, .card-dock, form, .cek-status-section, .faq-section, footer{
+    animation:riseIn .6s cubic-bezier(.16,.9,.3,1) both;
+  }
+  .card-dock{animation-delay:.08s;}
+  form{animation-delay:.14s;}
+  .cek-status-section{animation-delay:.18s;}
+  .faq-section{animation-delay:.22s;}
+  footer{animation-delay:.26s;}
 
   .page{
     width:100%;
@@ -149,6 +167,16 @@
     content:"";
     position:absolute; inset:0;
     background-image:repeating-linear-gradient(120deg, rgba(255,255,255,.045) 0px, rgba(255,255,255,.045) 1px, transparent 1px, transparent 22px);
+    pointer-events:none;
+  }
+  /* kilau tipis melintang, meniru pantulan cahaya di kartu berlaminasi */
+  .id-card::after{
+    content:"";
+    position:absolute;
+    top:-60%; left:-20%;
+    width:60%; height:220%;
+    background:linear-gradient(75deg, transparent, rgba(255,255,255,.10) 45%, rgba(255,255,255,.03) 55%, transparent);
+    transform:rotate(8deg);
     pointer-events:none;
   }
   .id-card .corner{
@@ -325,7 +353,7 @@
   }
   .field label .req{color:var(--amber-deep); font-weight:700;}
 
-  input[type=text], select{
+  input[type=text], input[type=email], select{
     width:100%;
     padding:12.5px 14px;
     font-family:var(--sans);
@@ -344,7 +372,7 @@
     padding-right:36px;
     cursor:pointer;
   }
-  input[type=text]:focus, select:focus{
+  input[type=text]:focus, input[type=email]:focus, select:focus{
     outline:none;
     border-color:var(--navy);
     background:#fff;
@@ -437,22 +465,60 @@
     margin-top:6px;
     box-shadow:0 16px 28px -14px rgba(11,61,145,.55);
     transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    position:relative;
+    overflow:hidden;
   }
+  button.submit::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.16) 50%, transparent 60%);
+    transform:translateX(-120%);
+    transition:transform .55s ease;
+  }
+  button.submit:hover::after{transform:translateX(120%);}
   button.submit:hover{filter:brightness(1.06); transform:translateY(-1px);}
   button.submit:active{transform:translateY(0);}
   button.submit:disabled{background:#a9b3cc; box-shadow:none; cursor:not-allowed; transform:none;}
+  button.submit:disabled::after{display:none;}
+  button.submit:focus-visible{outline:2.5px solid var(--amber); outline-offset:3px;}
+  button.submit.alt{
+    background:var(--surface);
+    color:var(--navy-deep);
+    border:1.5px solid var(--navy-deep);
+    box-shadow:none;
+  }
+  button.submit.alt:hover{filter:none; background:#eef1f8;}
+  button.submit.alt::after{display:none;}
+
+  a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{
+    outline:2.5px solid var(--blue); outline-offset:2px;
+  }
 
   .status{
     margin-top:16px;
     font-size:13px;
-    padding:14px 16px;
+    line-height:1.55;
+    padding:14px 16px 14px 44px;
     border-radius:10px;
+    border-left:3px solid transparent;
     display:none;
+    position:relative;
   }
   .status.show{display:block;}
-  .status.loading{background:#eef2fb; color:var(--navy-deep); border:1px solid #c9d6f7;}
-  .status.error{background:#fdecec; color:var(--err); border:1px solid #f2c3bd;}
-  .status.success{background:#eaf8f0; color:var(--ok); border:1px solid #b6e6c9;}
+  .status::before{
+    content:"";
+    position:absolute; left:14px; top:15px;
+    width:18px; height:18px;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+  .status.loading{background:#eef2fb; color:var(--navy-deep); border-color:var(--navy);}
+  .status.loading::before{display:none;}
+  .status.loading .spinner{position:absolute; left:14px; top:15px; margin:0;}
+  .status.error{background:#fdecec; color:var(--err); border-color:var(--err);}
+  .status.error::before{background:var(--err);}
+  .status.success{background:#eaf8f0; color:var(--ok); border-color:var(--ok);}
+  .status.success::before{background:var(--ok);}
   .status a.dl{
     display:inline-block;
     margin-top:10px;
@@ -475,6 +541,64 @@
   @keyframes spin{to{transform:rotate(360deg);}}
 
   /* ===================== FAQ ===================== */
+  .cek-status-section{
+    position:relative;
+    margin:38px 26px 0;
+    padding:22px 22px 24px;
+    background:
+      radial-gradient(420px 160px at 100% 0%, rgba(11,61,145,.05), transparent 60%),
+      var(--surface);
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    box-shadow:0 18px 34px -26px rgba(5,15,46,.28);
+    overflow:hidden;
+  }
+  /* garis perforasi + notch, meniru sobekan tiket/slip pelacakan */
+  .cek-status-section::before{
+    content:"";
+    position:absolute; left:0; right:0; top:64px;
+    height:0;
+    border-top:1.5px dashed var(--line);
+  }
+  .cek-status-section .notch{
+    position:absolute; top:55px;
+    width:18px; height:18px;
+    border-radius:50%;
+    background:var(--bg);
+  }
+  .cek-status-section .notch.left{left:-9px;}
+  .cek-status-section .notch.right{right:-9px;}
+  .cek-status-section .cek-head{
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:16px;
+  }
+  .cek-status-section .cek-icon{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px;
+    flex-shrink:0;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--amber), var(--amber-deep));
+    color:var(--navy-ink);
+    font-size:12px;
+    font-weight:800;
+  }
+  .cek-status-section .cek-title{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:15px;
+    color:var(--navy-deep);
+  }
+  .cek-status-section .cek-status-sub{
+    font-size:12.5px;
+    line-height:1.6;
+    color:var(--muted);
+    margin:0 0 16px;
+    padding-top:10px;
+  }
+  .cek-status-section .field{margin-bottom:14px;}
+  .cek-status-section input[type=text]{font-family:var(--mono); letter-spacing:.04em;}
+  .cek-status-section .status{margin-top:12px;}
+
   .faq-section{margin:44px 26px 0;}
   .faq-section .faq-head{margin-bottom:6px;}
   .faq-section h2{
@@ -499,7 +623,9 @@
   .faq-item summary{
     list-style:none;
     cursor:pointer;
-    padding:16px 2px;
+    padding:16px 8px 16px 2px;
+    margin:0 -8px;
+    border-radius:10px;
     display:flex;
     align-items:center;
     gap:12px;
@@ -507,7 +633,9 @@
     font-weight:700;
     color:var(--navy-deep);
     user-select:none;
+    transition:background .15s ease;
   }
+  .faq-item summary:hover{background:rgba(11,61,145,.035);}
   .faq-item summary::-webkit-details-marker{display:none;}
   .faq-item summary .emoji{
     width:28px; height:28px;
@@ -555,19 +683,36 @@
   }
 
   footer{
-    padding:34px 26px 40px;
+    padding:36px 26px 42px;
     font-size:11px;
     color:var(--muted);
     text-align:center;
     border-top:1px solid var(--line);
     margin-top:44px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+  footer .foot-crest{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:30px; height:30px;
+    border-radius:8px;
+    background:linear-gradient(135deg, var(--navy-ink), var(--navy));
+    color:var(--amber-soft);
+    font-family:var(--serif);
+    font-weight:800;
+    font-size:12px;
+    margin-bottom:2px;
   }
   footer strong{color:var(--navy-deep); font-family:var(--serif); font-size:12.5px;}
+  footer .foot-addr{max-width:34ch; line-height:1.6;}
 
   @media(max-width:480px){
     .hero{padding:34px 24px 108px;}
     .card-dock{margin:-84px 16px 0;}
     form{margin:26px 16px 0;}
+    .cek-status-section{margin:26px 16px 0;}
     .faq-section{margin:38px 16px 0;}
     footer{padding:28px 20px 32px;}
   }
@@ -650,6 +795,12 @@
       <p class="hint" id="alamatHint">0/120 karakter</p>
     </div>
 
+    <div class="field">
+      <label for="email">Email Aktif <span class="req">*</span></label>
+      <input type="email" id="email" required placeholder="Contoh: nama@gmail.com">
+      <p class="hint">Dipakai admin untuk mengirim notifikasi & file PDF kartu setelah disetujui</p>
+    </div>
+
     <div class="section-label"><span class="num">2</span>Data Akademik</div>
 
     <div class="row2">
@@ -692,10 +843,25 @@
       <a href="#faq" class="faq-note">📖 Lihat ketentuan foto sebelum upload</a>
     </div>
 
-    <button type="submit" class="submit" id="submitBtn">Buat Kartu Identitas</button>
+    <button type="submit" class="submit" id="submitBtn">Ajukan Kartu Identitas</button>
 
     <div class="status" id="status"></div>
   </form>
+
+  <section class="cek-status-section" id="cekStatus">
+    <span class="notch left"></span><span class="notch right"></span>
+    <div class="cek-head">
+      <span class="cek-icon">✓</span>
+      <span class="cek-title">Cek Status Pengajuan</span>
+    </div>
+    <p class="cek-status-sub">Sudah pernah mengajukan? Masukkan ID Pengajuan yang dikirim ke email kamu untuk memantau atau mengunduh kartu.</p>
+    <div class="field">
+      <label for="cekId">ID Pengajuan</label>
+      <input type="text" id="cekId" placeholder="Contoh: KTI-260721-AB12CD" style="text-transform:uppercase;">
+    </div>
+    <button type="button" class="submit alt" id="cekStatusBtn">Cek Status</button>
+    <div class="status" id="cekStatusResult"></div>
+  </section>
 
   <section class="faq-section" id="faq">
     <div class="faq-head">
@@ -737,10 +903,12 @@
       <summary><span class="emoji">⚙️</span>Proses &amp; Waktu Pembuatan Kartu<span class="chev">+</span></summary>
       <div class="faq-body">
         <ul>
-          <li>Setelah tombol <strong>"Buat Kartu Identitas"</strong> ditekan, sistem otomatis menyusun kartu dan file <strong>PDF bisa langsung diunduh</strong> di perangkat kamu.</li>
-          <li>File PDF hasil unduhan <strong>tidak disimpan di server</strong> — pastikan menyimpan/mem-backup file tersebut setelah proses selesai.</li>
-          <li>Untuk kebutuhan <strong>kartu fisik (cetak + laminating)</strong>, hasil PDF diserahkan ke Tata Usaha sesuai jadwal cetak yang ditentukan sekolah.</li>
-          <li>Jika muncul pesan gagal/error, cek kembali koneksi internet lalu ulangi pengisian; jika masih gagal hubungi admin sekolah.</li>
+          <li>Setelah tombol <strong>"Ajukan Kartu Identitas"</strong> ditekan, data kamu <strong>tersimpan sebagai pengajuan</strong> dan sistem akan mengirim <strong>ID Pengajuan</strong> ke email yang kamu daftarkan.</li>
+          <li>Pengajuan akan <strong>diperiksa dan disetujui oleh admin sekolah</strong> terlebih dahulu — kartu <strong>PDF belum langsung jadi</strong> saat form dikirim.</li>
+          <li>Begitu admin menyetujui, kamu akan menerima <strong>email berisi file PDF kartu identitas</strong>, dan kartu juga bisa diunduh lewat menu <strong>"Cek Status Pengajuan"</strong> di halaman ini menggunakan ID Pengajuan kamu.</li>
+          <li>Jika pengajuan <strong>ditolak</strong> (misalnya foto atau data tidak sesuai ketentuan), kamu akan menerima email berisi alasannya dan diminta mengisi ulang form dengan data yang benar.</li>
+          <li>Untuk kebutuhan <strong>kartu fisik (cetak + laminating)</strong>, hasil PDF yang sudah disetujui diserahkan ke Tata Usaha sesuai jadwal cetak yang ditentukan sekolah.</li>
+          <li>Jika muncul pesan gagal/error saat mengajukan, cek kembali koneksi internet lalu ulangi pengisian; jika masih gagal hubungi admin sekolah.</li>
         </ul>
       </div>
     </details>
@@ -776,7 +944,11 @@
     </details>
   </section>
 
-  <footer>Jl. Mayor Syamsu No. 02 Jayaraga, Tarogong Kidul, Garut<br><strong>SMKS Ciledug Al Musaddadiyah</strong></footer>
+  <footer>
+    <span class="foot-crest">AM</span>
+    <strong>SMKS Ciledug Al Musaddadiyah</strong>
+    <span class="foot-addr">Jl. Mayor Syamsu No. 02 Jayaraga, Tarogong Kidul, Garut</span>
+  </footer>
 </div>
 
 <script>
@@ -800,6 +972,10 @@ const nisnHint = document.getElementById('nisnHint');
 const alamatInput = document.getElementById('alamat');
 const alamatHint = document.getElementById('alamatHint');
 const ALAMAT_MAX = 120;
+const emailInput = document.getElementById('email');
+const cekIdInput = document.getElementById('cekId');
+const cekStatusBtn = document.getElementById('cekStatusBtn');
+const cekStatusResult = document.getElementById('cekStatusResult');
 
 // === Validasi NISN: hanya angka, otomatis dibatasi 10 digit ===
 nisnInput.addEventListener('input', () => {
@@ -907,19 +1083,28 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
+  const emailVal = emailInput.value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)){
+    setStatus('error', 'Isi email aktif dengan format yang benar.');
+    emailInput.focus();
+    return;
+  }
+
   submitBtn.disabled = true;
-  setStatus('loading', '<span class="spinner"></span>Membuat kartu identitas, mohon tunggu...');
+  setStatus('loading', '<span class="spinner"></span>Mengirim pengajuan, mohon tunggu...');
 
   try{
     const fotoBase64 = await fileToBase64(file);
 
     const payload = {
+      action: 'ajukan',
       nama: document.getElementById('nama').value.trim(),
       jk: jkEl.value,
       nisn: document.getElementById('nisn').value.trim(),
       ttl: document.getElementById('ttl').value.trim(),
       kompetensi: kompetensiFinal,
       alamat: document.getElementById('alamat').value.trim(),
+      email: emailVal,
       fotoBase64: fotoBase64,
       fotoMime: file.type || 'image/jpeg'
     };
@@ -932,19 +1117,11 @@ form.addEventListener('submit', async (e) => {
 
     const data = await res.json();
 
-    if(data.status === 'ok' && data.pdfBase64){
-      const byteChars = atob(data.pdfBase64);
-      const byteNumbers = new Array(byteChars.length);
-      for (let i = 0; i < byteChars.length; i++) {
-        byteNumbers[i] = byteChars.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'application/pdf' });
-      const blobUrl = URL.createObjectURL(blob);
-
+    if(data.status === 'ok' && data.id){
       setStatus('success',
-        'Kartu identitas berhasil dibuat. File hanya tersimpan di perangkat kamu.<br>' +
-        '<a class="dl" href="' + blobUrl + '" download="' + data.fileName + '">Download PDF</a>'
+        'Pengajuan berhasil dikirim dan sedang <strong>menunggu persetujuan admin</strong>.<br>' +
+        'ID Pengajuan kamu: <strong>' + data.id + '</strong><br>' +
+        'ID ini juga sudah dikirim ke email <strong>' + emailVal + '</strong>. Simpan baik-baik untuk cek status atau unduh kartu nanti di bagian "Cek Status Pengajuan" di bawah.'
       );
       form.reset();
       preview.style.display = 'none';
@@ -955,13 +1132,73 @@ form.addEventListener('submit', async (e) => {
       nisnHint.style.color = '';
       alamatHint.textContent = '0/' + ALAMAT_MAX + ' karakter';
       alamatHint.style.color = '';
+      cekIdInput.value = data.id;
     } else {
-      setStatus('error', 'Gagal membuat kartu: ' + (data.message || 'Terjadi kesalahan tidak diketahui.'));
+      setStatus('error', 'Gagal mengirim pengajuan: ' + (data.message || 'Terjadi kesalahan tidak diketahui.'));
     }
   } catch(err){
     setStatus('error', 'Terjadi kesalahan koneksi: ' + err.message);
   } finally {
     submitBtn.disabled = false;
+  }
+});
+
+// ============================================================
+// CEK STATUS PENGAJUAN — kirim action 'cek_status' ke Web App
+// ============================================================
+function setCekStatus(type, html){
+  cekStatusResult.className = 'status show ' + type;
+  cekStatusResult.innerHTML = html;
+}
+
+cekStatusBtn.addEventListener('click', async () => {
+  const id = cekIdInput.value.trim().toUpperCase();
+  if(!id){
+    setCekStatus('error', 'Masukkan ID Pengajuan terlebih dahulu.');
+    return;
+  }
+
+  if(WEB_APP_URL.indexOf('GANTI_DENGAN') !== -1){
+    setCekStatus('error', 'Halaman belum terhubung ke sistem. Hubungi admin sekolah.');
+    return;
+  }
+
+  cekStatusBtn.disabled = true;
+  setCekStatus('loading', '<span class="spinner"></span>Memeriksa status pengajuan...');
+
+  try{
+    const res = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'cek_status', id: id })
+    });
+    const data = await res.json();
+
+    if(data.status !== 'ok'){
+      setCekStatus('error', data.message || 'ID pengajuan tidak ditemukan.');
+      return;
+    }
+
+    if(data.pengajuanStatus === 'Disetujui' && data.pdfUrl){
+      setCekStatus('success',
+        'Kartu identitas atas nama <strong>' + data.nama + '</strong> sudah <strong>disetujui</strong>.<br>' +
+        '<a class="dl" href="' + data.pdfUrl + '" target="_blank" rel="noopener">Download PDF</a>'
+      );
+    } else if(data.pengajuanStatus === 'Ditolak'){
+      setCekStatus('error',
+        'Pengajuan atas nama <strong>' + data.nama + '</strong> <strong>ditolak</strong>.' +
+        (data.catatan ? '<br>Catatan admin: ' + data.catatan : '') +
+        '<br>Silakan ajukan ulang lewat form di atas dengan data/foto yang sesuai ketentuan.'
+      );
+    } else {
+      setCekStatus('loading',
+        'Pengajuan atas nama <strong>' + data.nama + '</strong> masih <strong>menunggu persetujuan admin</strong>. Coba cek lagi nanti.'
+      );
+    }
+  } catch(err){
+    setCekStatus('error', 'Terjadi kesalahan koneksi: ' + err.message);
+  } finally {
+    cekStatusBtn.disabled = false;
   }
 });
 </script>

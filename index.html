@@ -2,11 +2,16 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Formulir pengajuan Kartu Pelajar Digital SMKS Ciledug Al Musaddadiyah — isi data, unggah pas foto, dan pantau status pengajuan kartu identitas siswa.">
+<meta name="theme-color" content="#1447c4">
 <title>Kartu Identitas Siswa — SMKS Ciledug Al Musaddadiyah</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<!-- Pemuatan font non-blocking: halaman tetap tampil cepat, font menyusul begitu siap -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet"></noscript>
 <style>
   :root{
     --navy:#2563eb;
@@ -30,7 +35,8 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
-  html{-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+  html{-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-size-adjust:100%; -webkit-text-size-adjust:100%;}
+  a,button,input,select{-webkit-tap-highlight-color:transparent;}
   ::selection{background:var(--amber-soft); color:var(--navy-ink);}
   body{
     min-height:100vh;
@@ -793,6 +799,26 @@
     .student-table thead th, .student-table tbody td{padding:9px 10px;}
   }
 
+  /* Layar sangat kecil (HP kecil / lama, <=360px) — supaya tidak ada elemen terpotong */
+  @media(max-width:360px){
+    .hero{padding:28px 18px 96px;}
+    .hero h1{font-size:26px;}
+    .hero .eyebrow{font-size:10px;}
+    .card-dock{margin:-78px 10px 0;}
+    .id-card{padding:16px 14px 14px;}
+    .id-card .photo{width:56px; height:72px;}
+    form, .cek-status-section, .student-list-section, .faq-section{margin-left:12px; margin-right:12px;}
+    .row2{grid-template-columns:1fr; gap:14px;}
+  }
+
+  /* Tablet (antara mode mobile & desktop) — kartu diberi ruang lebih lega */
+  @media(min-width:481px) and (max-width:859px){
+    .page{max-width:640px;}
+    .hero{padding:44px 40px 116px;}
+    .card-dock{margin:-88px 30px 0;}
+    form, .cek-status-section, .student-list-section, .faq-section{margin-left:30px; margin-right:30px;}
+  }
+
   /* ===================== DESKTOP / LAYAR LEBAR ===================== */
   @media(min-width:860px){
     body{padding:40px 20px;}
@@ -822,7 +848,7 @@
     <h1>Kartu Pelajar Digital</h1>
     <p class="school">SMKS Ciledug Al Musaddadiyah</p>
     <div class="rule"></div>
-    <p>Lengkapi data pada formulir di bawah. Pratinjau kartu akan tampil otomatis, lalu unduh hasil akhirnya dalam format PDF.</p>
+    <p>Kartu Pelajar adalah identitas resmi setiap siswa SMKS Ciledug Al Musaddadiyah — dibutuhkan saat ujian, praktik kerja lapangan, hingga berbagai kegiatan sekolah lainnya. Lengkapi data pada formulir di bawah, pratinjau kartu akan tampil otomatis, lalu unduh hasil akhirnya dalam format PDF setelah disetujui admin.</p>
   </div>
 
   <div class="card-dock">

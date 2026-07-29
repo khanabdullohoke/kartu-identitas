@@ -555,11 +555,95 @@
     line-height:1.6;
   }
 
+  .student-toolbar{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 0 14px;
+  }
+  .student-search{
+    position:relative;
+    flex:1 1 auto;
+    min-width:0;
+  }
+  .student-search svg{
+    position:absolute;
+    left:12px;
+    top:50%;
+    transform:translateY(-50%);
+    width:15px;
+    height:15px;
+    color:var(--muted);
+    pointer-events:none;
+  }
+  .student-search input{
+    width:100%;
+    padding:10px 34px;
+    border:1.5px solid var(--line);
+    border-radius:11px;
+    background:var(--surface);
+    font-family:var(--sans);
+    font-size:13px;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .18s, box-shadow .18s;
+  }
+  .student-search input::placeholder{color:var(--muted); opacity:.85;}
+  .student-search input:focus{
+    border-color:var(--navy);
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+  }
+  .student-search-clear{
+    position:absolute;
+    right:7px;
+    top:50%;
+    transform:translateY(-50%);
+    width:20px; height:20px;
+    border:none;
+    border-radius:50%;
+    background:var(--line);
+    color:var(--muted);
+    font-size:13px;
+    line-height:1;
+    cursor:pointer;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+  }
+  .student-search-clear:hover{background:var(--amber-soft); color:var(--navy-ink);}
+  .student-count{
+    flex:0 0 auto;
+    font-size:10.5px;
+    font-weight:700;
+    color:var(--muted);
+    white-space:nowrap;
+    background:var(--bg);
+    border:1px solid var(--line);
+    padding:7px 11px;
+    border-radius:999px;
+  }
+  @media (max-width:420px){
+    .student-toolbar{flex-wrap:wrap;}
+    .student-count{order:2; flex:1 1 100%; text-align:center;}
+    .student-search{order:1; flex:1 1 100%;}
+  }
+
   .student-table-wrap{
     border:1px solid var(--line);
     border-radius:14px;
     overflow:hidden;
     box-shadow:0 10px 22px -18px rgba(20,71,196,.28);
+  }
+  .student-table-slide.slide-next{animation:slideInRight .26s ease both;}
+  .student-table-slide.slide-prev{animation:slideInLeft .26s ease both;}
+  @keyframes slideInRight{
+    from{opacity:0; transform:translateX(16px);}
+    to{opacity:1; transform:translateX(0);}
+  }
+  @keyframes slideInLeft{
+    from{opacity:0; transform:translateX(-16px);}
+    to{opacity:1; transform:translateX(0);}
   }
   .student-table{
     width:100%;
@@ -616,6 +700,39 @@
     border:1.5px dashed var(--line);
     border-radius:12px;
     line-height:1.6;
+  }
+
+  .student-pagination{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin:16px 0 0;
+  }
+  .student-page-btn{
+    width:34px; height:34px;
+    flex:0 0 auto;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    background:var(--surface);
+    color:var(--navy-deep);
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background .16s, border-color .16s, transform .12s, opacity .16s;
+  }
+  .student-page-btn:hover:not(:disabled){background:rgba(37,99,235,.08); border-color:var(--navy);}
+  .student-page-btn:active:not(:disabled){transform:scale(.92);}
+  .student-page-btn:disabled{opacity:.35; cursor:not-allowed;}
+  .student-page-info{
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--muted);
+    min-width:96px;
+    text-align:center;
   }
 
   /* ===================== FAQ ===================== */
@@ -987,14 +1104,32 @@
   <section class="student-list-section" id="daftarSiswa">
     <div class="section-label"><span class="num">🪪</span>Kartu Identitas yang Sudah Disetujui</div>
     <p class="student-list-sub">Daftar siswa yang pengajuan kartu identitasnya sudah disetujui admin dan siap dicetak. Foto tidak ditampilkan demi menjaga privasi.</p>
-    <div class="student-table-wrap">
-      <table class="student-table">
-        <thead>
-          <tr><th>Nama</th><th>NISN</th><th>Jurusan</th></tr>
-        </thead>
-        <tbody id="studentTableBody"></tbody>
-      </table>
+    <div class="student-toolbar">
+      <div class="student-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="studentSearchInput" placeholder="Cari nama, NISN, atau jurusan..." autocomplete="off">
+        <button type="button" class="student-search-clear" id="studentSearchClear" aria-label="Hapus pencarian">&times;</button>
+      </div>
+      <div class="student-count" id="studentCount"></div>
     </div>
+
+    <div class="student-table-wrap">
+      <div class="student-table-slide" id="studentTableSlide">
+        <table class="student-table">
+          <thead>
+            <tr><th>Nama</th><th>NISN</th><th>Jurusan</th></tr>
+          </thead>
+          <tbody id="studentTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="student-pagination" id="studentPagination" style="display:none;">
+      <button type="button" class="student-page-btn" id="studentPrevBtn" aria-label="Halaman sebelumnya">&#8249;</button>
+      <span class="student-page-info" id="studentPageInfo"></span>
+      <button type="button" class="student-page-btn" id="studentNextBtn" aria-label="Halaman berikutnya">&#8250;</button>
+    </div>
+
     <div class="student-list-empty" id="studentListEmpty" style="display:none;"></div>
   </section>
 
@@ -1343,8 +1478,21 @@ cekStatusBtn.addEventListener('click', async () => {
 // dikirim server: foto, nama, NISN, jurusan.
 // ============================================================
 const studentTableWrap = document.querySelector('.student-table-wrap');
+const studentTableSlide = document.getElementById('studentTableSlide');
 const studentTableBody = document.getElementById('studentTableBody');
 const studentListEmpty = document.getElementById('studentListEmpty');
+const studentSearchInput = document.getElementById('studentSearchInput');
+const studentSearchClear = document.getElementById('studentSearchClear');
+const studentCount = document.getElementById('studentCount');
+const studentPagination = document.getElementById('studentPagination');
+const studentPrevBtn = document.getElementById('studentPrevBtn');
+const studentNextBtn = document.getElementById('studentNextBtn');
+const studentPageInfo = document.getElementById('studentPageInfo');
+
+const STUDENT_PAGE_SIZE = 20; // tampilkan 20 data per halaman, sisanya digeser via tombol
+let daftarSiswaFull = [];
+let daftarSiswaFiltered = [];
+let halamanSiswaAktif = 1;
 
 function escapeHtml(str){
   return (str || '').toString()
@@ -1364,16 +1512,8 @@ function skeletonSiswaHTML(jumlah){
   return html;
 }
 
-function tampilkanDaftarSiswa(daftar){
-  if(!daftar || !daftar.length){
-    studentTableWrap.style.display = 'none';
-    studentListEmpty.style.display = 'block';
-    studentListEmpty.textContent = 'Belum ada kartu identitas yang disetujui.';
-    return;
-  }
-  studentTableWrap.style.display = 'block';
-  studentListEmpty.style.display = 'none';
-  studentTableBody.innerHTML = daftar.map(function(s){
+function renderBarisSiswa(daftar){
+  return daftar.map(function(s){
     return '' +
       '<tr>' +
         '<td class="col-nama">' + escapeHtml(s.nama || '-') + '</td>' +
@@ -1383,9 +1523,93 @@ function tampilkanDaftarSiswa(daftar){
   }).join('');
 }
 
+function renderHalamanSiswa(arah){
+  const total = daftarSiswaFiltered.length;
+  const totalHalaman = Math.max(1, Math.ceil(total / STUDENT_PAGE_SIZE));
+  if(halamanSiswaAktif > totalHalaman) halamanSiswaAktif = totalHalaman;
+  if(halamanSiswaAktif < 1) halamanSiswaAktif = 1;
+
+  if(!total){
+    studentTableWrap.style.display = 'none';
+    studentPagination.style.display = 'none';
+    studentListEmpty.style.display = 'block';
+    studentListEmpty.textContent = daftarSiswaFull.length
+      ? 'Tidak ada data yang cocok dengan pencarian.'
+      : 'Belum ada kartu identitas yang disetujui.';
+    studentCount.textContent = daftarSiswaFull.length ? '0 hasil' : '';
+    return;
+  }
+
+  const mulai = (halamanSiswaAktif - 1) * STUDENT_PAGE_SIZE;
+  const potongan = daftarSiswaFiltered.slice(mulai, mulai + STUDENT_PAGE_SIZE);
+  const akhir = Math.min(mulai + STUDENT_PAGE_SIZE, total);
+
+  studentTableWrap.style.display = 'block';
+  studentListEmpty.style.display = 'none';
+  studentTableBody.innerHTML = renderBarisSiswa(potongan);
+
+  studentTableSlide.classList.remove('slide-next', 'slide-prev');
+  void studentTableSlide.offsetWidth;
+  if(arah === 'next') studentTableSlide.classList.add('slide-next');
+  else if(arah === 'prev') studentTableSlide.classList.add('slide-prev');
+
+  studentCount.textContent = total + ' siswa';
+
+  if(total > STUDENT_PAGE_SIZE){
+    studentPagination.style.display = 'flex';
+    studentPageInfo.textContent = (mulai + 1) + '\u2013' + akhir + ' dari ' + total;
+    studentPrevBtn.disabled = halamanSiswaAktif <= 1;
+    studentNextBtn.disabled = halamanSiswaAktif >= totalHalaman;
+  } else {
+    studentPagination.style.display = 'none';
+  }
+}
+
+function terapkanPencarianSiswa(){
+  const kata = studentSearchInput.value.trim().toLowerCase();
+  studentSearchClear.style.display = kata ? 'flex' : 'none';
+  if(!kata){
+    daftarSiswaFiltered = daftarSiswaFull;
+  } else {
+    daftarSiswaFiltered = daftarSiswaFull.filter(function(s){
+      return (s.nama || '').toLowerCase().indexOf(kata) !== -1 ||
+             (s.nisn || '').toLowerCase().indexOf(kata) !== -1 ||
+             (s.kompetensi || '').toLowerCase().indexOf(kata) !== -1;
+    });
+  }
+  halamanSiswaAktif = 1;
+  renderHalamanSiswa();
+}
+
+let studentSearchDebounce;
+studentSearchInput.addEventListener('input', function(){
+  clearTimeout(studentSearchDebounce);
+  studentSearchDebounce = setTimeout(terapkanPencarianSiswa, 150);
+});
+studentSearchClear.addEventListener('click', function(){
+  studentSearchInput.value = '';
+  terapkanPencarianSiswa();
+  studentSearchInput.focus();
+});
+studentPrevBtn.addEventListener('click', function(){
+  if(halamanSiswaAktif > 1){ halamanSiswaAktif--; renderHalamanSiswa('prev'); }
+});
+studentNextBtn.addEventListener('click', function(){
+  const totalHalaman = Math.max(1, Math.ceil(daftarSiswaFiltered.length / STUDENT_PAGE_SIZE));
+  if(halamanSiswaAktif < totalHalaman){ halamanSiswaAktif++; renderHalamanSiswa('next'); }
+});
+
+function tampilkanDaftarSiswa(daftar){
+  daftarSiswaFull = Array.isArray(daftar) ? daftar : [];
+  daftarSiswaFiltered = daftarSiswaFull;
+  halamanSiswaAktif = 1;
+  renderHalamanSiswa();
+}
+
 async function muatDaftarSiswa(){
   if(WEB_APP_URL.indexOf('GANTI_DENGAN') !== -1){
     studentTableWrap.style.display = 'none';
+    studentPagination.style.display = 'none';
     studentListEmpty.style.display = 'block';
     studentListEmpty.textContent = 'Daftar belum tersedia. Hubungi admin sekolah.';
     return;
@@ -1393,7 +1617,7 @@ async function muatDaftarSiswa(){
 
   studentTableWrap.style.display = 'block';
   studentListEmpty.style.display = 'none';
-  studentTableBody.innerHTML = skeletonSiswaHTML(5);
+  studentTableBody.innerHTML = skeletonSiswaHTML(8);
 
   try{
     const res = await fetch(WEB_APP_URL, {
@@ -1407,11 +1631,13 @@ async function muatDaftarSiswa(){
       tampilkanDaftarSiswa(data.daftar);
     } else {
       studentTableWrap.style.display = 'none';
+      studentPagination.style.display = 'none';
       studentListEmpty.style.display = 'block';
       studentListEmpty.textContent = 'Gagal memuat daftar siswa. Coba muat ulang halaman.';
     }
   } catch(err){
     studentTableWrap.style.display = 'none';
+    studentPagination.style.display = 'none';
     studentListEmpty.style.display = 'block';
     studentListEmpty.textContent = 'Gagal memuat daftar siswa: koneksi bermasalah.';
   }

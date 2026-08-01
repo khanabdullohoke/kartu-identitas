@@ -1572,9 +1572,9 @@ function terapkanPencarianSiswa(){
     daftarSiswaFiltered = daftarSiswaFull;
   } else {
     daftarSiswaFiltered = daftarSiswaFull.filter(function(s){
-      return (s.nama || '').toLowerCase().indexOf(kata) !== -1 ||
-             (s.nisn || '').toLowerCase().indexOf(kata) !== -1 ||
-             (s.kompetensi || '').toLowerCase().indexOf(kata) !== -1;
+      return String(s.nama || '').toLowerCase().indexOf(kata) !== -1 ||
+             String(s.nisn || '').toLowerCase().indexOf(kata) !== -1 ||
+             String(s.kompetensi || '').toLowerCase().indexOf(kata) !== -1;
     });
   }
   halamanSiswaAktif = 1;
